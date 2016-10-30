@@ -78,17 +78,44 @@ int BinarySearchTree::findHeight (BinaryNode *node) {
 
 // end finding height
 
+// finding number of nodes
 int BinarySearchTree::getNumberOfNodes() {
-    return 0;
+    countNodes(root, numNodes);
+    return numNodes;
+}
+
+int BinarySearchTree::countNodes(BinaryNode *node, int &num) {
+    if (node == NULL)
+        return 0;
+    numNodes = 1 + countNodes(node->left, numNodes) + countNodes(node->right, numNodes);
+    return numNodes;
+}
+
+// end finding number of nodes
+
+BinaryNode* BinarySearchTree::insert(BinaryNode *&node, const int &newEntry) {
+    if (node == NULL)
+        node = new BinaryNode(newEntry);
+
+    else if(node->data > newEntry)
+        node->left = insert(node->left, newEntry);
+    else if(node->data < newEntry)
+        node->right = insert(node->right, newEntry);
+
+    return node;
 }
 
 bool BinarySearchTree::add(const int &newEntry) {
+
+    BinaryNode *flag = insert(root, newEntry);
+    return (bool) flag;
+    /*
     if (isEmpty()) {
         root = new BinaryNode(newEntry);
         return true;
     }
     else
-        return root->add(newEntry);
+        return root->add(newEntry);*/
 }
 
 // removing
@@ -168,11 +195,11 @@ void BinarySearchTree::preorderTraverse() {
     preorder(root);
 }
 
-void BinarySearchTree::preorder(BinaryNode *root) {
-    if (root != NULL) {
-        cout << root->data << endl;
-        preorder(root->left);
-        preorder(root->right);
+void BinarySearchTree::preorder(BinaryNode *node) {
+    if (node != NULL) {
+        cout << node->data << endl;
+        preorder(node->left);
+        preorder(node->right);
     }
 }
 
@@ -180,11 +207,11 @@ void BinarySearchTree::inorderTraverse() {
     inorder(root);
 }
 
-void BinarySearchTree::inorder(BinaryNode *root) {
-    if (root != NULL) {
-        preorder(root->left);
-        cout << root->data << endl;
-        preorder(root->right);
+void BinarySearchTree::inorder(BinaryNode *node) {
+    if (node != NULL) {
+        inorder(node->left);
+        cout << node->data << endl;
+        inorder(node->right);
     }
 }
 
@@ -192,11 +219,11 @@ void BinarySearchTree::postorderTraverse() {
     postorder(root);
 }
 
-void BinarySearchTree::postorder(BinaryNode *root) {
-    if (root != NULL) {
-        preorder(root->left);
-        preorder(root->right);
-        cout << root->data << endl;
+void BinarySearchTree::postorder(BinaryNode *node) {
+    if (node != NULL) {
+        postorder(node->left);
+        postorder(node->right);
+        cout << node->data << endl;
     }
 }
 
@@ -211,4 +238,109 @@ int BinarySearchTree::span(const int &a, const int &b) {
 
 void BinarySearchTree::mirror() {
 
+}
+
+void BinarySearchTree::trim(const int &min, const int &max) {
+    trim(root, min, max);
+}
+
+void BinarySearchTree::trim(BinaryNode *node, const int &min, const int &max) {
+    if (node != NULL) {
+        //cout << node->data << "debug data" << endl;
+        if (node->data < min) {
+            BinaryNode *tmp = node;
+            node = node->right;
+            destroyTree(tmp);
+        }
+        else if (node->data > max) {
+            BinaryNode *tmp = node;
+            node = node->left;
+            destroyTree(tmp);
+        }
+        else {
+            trim(node->left, min, max);
+            trim(node->right, min, max);
+        }
+    }
+}
+
+
+bool BinarySearchTree::checkBST(BinaryNode* node) {
+    if(node->left == NULL || node->right == NULL) {
+        return true;
+    }
+    else if(node->left != NULL && node->left->data < node->data) {
+        return checkBST(node->left);
+    }
+    else if(node->right != NULL && node->right->data > node->data) {
+        return checkBST(node->right);
+    }
+    return false;
+}
+
+bool BinarySearchTree::checkBST() {
+    return checkBST(root);
+}
+
+bool BinarySearchTree::isbalancedTree() {
+    return isbalancedTree(root);
+}
+
+bool BinarySearchTree::isbalancedTree(BinaryNode *node) {
+    // {(if node = null return true)} OR
+    // {(left AND right is balanced AND
+    // absolute value of left height - right height <= 1
+    // return true)}
+    return (node == NULL) ||
+    (isbalancedTree(node->left) &&
+     isbalancedTree(node->right) &&
+     abs(findHeight(node->left) - findHeight(node->right)) <= 1);
+}
+
+bool BinarySearchTree::isfullTree() {
+    return isfullTree(root);
+}
+
+bool BinarySearchTree::isfullTree(BinaryNode *node) {
+    if (node == NULL)
+        return true;
+    if((node->left != NULL && node->right == NULL) ||
+            (node->left == NULL && node->right != NULL))
+        return false;
+    else
+        return isfullTree(node->left) && isfullTree(node->right);
+}
+
+
+bool BinarySearchTree::iscompleteTree() {
+    return false;
+}
+
+bool BinarySearchTree::iscompleteTree(BinaryNode *node) {
+    return false;
+}
+
+int BinarySearchTree::inorderSuccessor(const int &value) {
+    return inorderSuccessor(root, value);
+}
+
+int BinarySearchTree::inorderSuccessor(BinaryNode *node, const int &value) {
+    if (value < node->data)
+        return inorderSuccessor(node->left, value);
+    else if (value > node->data)
+        return inorderSuccessor(node->right, value);
+    else if (value == node->data) {
+        if (node->right->left == NULL)
+            return node->right->data;
+        else
+            return goLeft(node->right->left);
+    }
+    return -1;
+}
+
+int BinarySearchTree::goLeft(BinaryNode *node) {
+    if(node->left == NULL)
+        return node->data;
+    else
+        return goLeft(node->left);
 }

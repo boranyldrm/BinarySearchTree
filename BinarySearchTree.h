@@ -69,6 +69,27 @@ public:
     // If you apply this function to the mirrored tree, you should obtain the original BST.
     void mirror ();
 
+
+    //todo deneme
+    void trim(const int &min, const int &max);
+    void trim(BinaryNode *node, const int &min, const int &max);
+
+    bool checkBST();
+    bool checkBST(BinaryNode* node);
+
+    bool isbalancedTree();
+    bool isbalancedTree(BinaryNode *node);
+
+    bool isfullTree();
+    bool isfullTree(BinaryNode *node);
+
+    bool iscompleteTree();
+    bool iscompleteTree(BinaryNode *node);
+
+    int inorderSuccessor(const int &value);
+    int inorderSuccessor(BinaryNode *node, const int &value);
+    int goLeft(BinaryNode *node);
+
 private:
 
     // copyTree used for copy constructor
@@ -80,15 +101,21 @@ private:
     // findHeight used for getHeight
     int findHeight (BinaryNode *node);
 
+    // find number of nodes
+    int countNodes(BinaryNode *node, int &num);
+
+    BinaryNode* insert(BinaryNode *&node, const int &newEntry);
+
     // deleteNode, deleteNodeItem, processLeftmost used for remove
     bool deleteNode (BinaryNode *node, const int &entry);
     bool deleteNodeItem (BinaryNode * &nodePtr);
     void processLeftmost (BinaryNode *&nodePtr, int &treeItem);
 
     // traversing
-    void preorder (BinaryNode *root);
-    void inorder (BinaryNode *root);
-    void postorder (BinaryNode *root);
+    void preorder (BinaryNode *node);
+    void inorder (BinaryNode *node);
+    void postorder (BinaryNode *node);
+
 
     //properties
     BinaryNode *root;
