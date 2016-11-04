@@ -2,8 +2,8 @@
 // Created by Boran Yildirim on 26.10.2016.
 //
 
-#ifndef ASSİGNMENT_2_BINARYNODE_H
-#define ASSİGNMENT_2_BINARYNODE_H
+#ifndef ASSIGNMENT_2_BINARYNODE_H
+#define ASSIGNMENT_2_BINARYNODE_H
 
 
 class BinaryNode {
@@ -30,4 +30,4 @@ private:
 };
 
 
-#endif //ASSİGNMENT_2_BINARYNODE_H
+#endif //ASSIGNMENT_2_BINARYNODE_H

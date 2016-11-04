@@ -2,8 +2,8 @@
 // Created by Boran Yildirim on 26.10.2016.
 //
 
-#ifndef ASSİGNMENT_2_BINARYSEARCHTREE_H
-#define ASSİGNMENT_2_BINARYSEARCHTREE_H
+#ifndef ASSIGNMENT_2_BINARYSEARCHTREE_H
+#define ASSIGNMENT_2_BINARYSEARCHTREE_H
 
 
 #include "BinaryNode.h"
@@ -126,4 +126,4 @@ private:
 };
 
 
-#endif //ASSİGNMENT_2_BINARYSEARCHTREE_H
+#endif //ASSIGNMENT_2_BINARYSEARCHTREE_H

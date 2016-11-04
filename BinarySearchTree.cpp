@@ -262,7 +262,7 @@ void BinarySearchTree::mirror() {
 }
 
 void BinarySearchTree::mirror(BinaryNode *node) {
-    
+
 }
 
 void BinarySearchTree::trim(const int &min, const int &max) {
