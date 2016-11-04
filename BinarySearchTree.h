@@ -74,9 +74,6 @@ public:
     void trim(const int &min, const int &max);
     void trim(BinaryNode *node, const int &min, const int &max);
 
-    bool checkBST();
-    bool checkBST(BinaryNode* node);
-
     bool isbalancedTree();
     bool isbalancedTree(BinaryNode *node);
 
@@ -93,7 +90,7 @@ public:
 private:
 
     // copyTree used for copy constructor
-    void copyTree (BinaryNode *treePtr, BinaryNode* & newTreePtr) const;
+    void copyTree (BinaryNode *treePtr, BinaryNode *&newTreePtr) const;
 
     // destroyTree used for destructor
     void destroyTree (BinaryNode *&treePtr);
@@ -102,9 +99,9 @@ private:
     int findHeight (BinaryNode *node);
 
     // find number of nodes
-    int countNodes(BinaryNode *node, int &num);
+    int countNodes (BinaryNode *node, int &num);
 
-    BinaryNode* insert(BinaryNode *&node, const int &newEntry);
+    BinaryNode* insert (BinaryNode *&node, const int &newEntry);
 
     // deleteNode, deleteNodeItem, processLeftmost used for remove
     bool deleteNode (BinaryNode *node, const int &entry);
@@ -115,7 +112,11 @@ private:
     void preorder (BinaryNode *node);
     void inorder (BinaryNode *node);
     void postorder (BinaryNode *node);
+    void levelorder (BinaryNode *node, const int &level);
 
+    void span (BinaryNode *node, const int &a, const int &b, int &result);
+
+    void mirror(BinaryNode *node);
 
     //properties
     BinaryNode *root;

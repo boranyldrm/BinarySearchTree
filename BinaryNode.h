@@ -7,18 +7,26 @@
 
 
 class BinaryNode {
-private:
+public:
+    //constructors
     BinaryNode ();
     BinaryNode (const int &entry);
     BinaryNode (const int &entry, BinaryNode *bnleft, BinaryNode *bnright);
 
-    bool add (const int &entry);
+    // accessors and mutators
+    int getData();
+    void setData(const int &newData);
+    BinaryNode *& getLeft();
+    void setLeft(BinaryNode *node);
+    BinaryNode *& getRight();
+    void setRight(BinaryNode *node);
+private:
 
+    // properties
     int data;
     BinaryNode *left;
     BinaryNode *right;
 
-    friend class BinarySearchTree;
 };
 
 

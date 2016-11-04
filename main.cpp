@@ -23,19 +23,18 @@ int main() {
     tree.add(28);
     tree.add(50);
 
-    tree.postorderTraverse();
-/*
+
     cout << "***** Preorder *****" << endl;
     tree.preorderTraverse();
 
     cout << "***** Inorder *****" << endl;
     tree.inorderTraverse();
 
-    cout << "*****Postorder*****" << endl;
+    cout << "***** Postorder *****" << endl;
     tree.postorderTraverse();
 
-    tree.trim(21, 56);
-    tree.inorderTraverse();
-*/
+    cout << "***** Levelorder" << endl;
+    tree.levelorderTraverse();
+
     return 0;
 }

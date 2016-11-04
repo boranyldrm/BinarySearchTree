@@ -30,9 +30,9 @@ BinarySearchTree::BinarySearchTree(BinarySearchTree &tree) {
 
 void BinarySearchTree::copyTree(BinaryNode *treePtr, BinaryNode *&newTreePtr) const {
     if (treePtr != NULL) {
-        newTreePtr = new BinaryNode(treePtr->data);
-        copyTree(treePtr->left, newTreePtr->left);
-        copyTree(treePtr->right, newTreePtr->right);
+        newTreePtr = new BinaryNode(treePtr->getData());
+        copyTree(treePtr->getLeft(), newTreePtr->getLeft());
+        copyTree(treePtr->getRight(), newTreePtr->getRight());
     }
     else
         newTreePtr = NULL;
@@ -48,8 +48,8 @@ BinarySearchTree::~BinarySearchTree() {
 
 void BinarySearchTree::destroyTree(BinaryNode *&treePtr) {
     if (treePtr != NULL) {
-        destroyTree(treePtr->left);
-        destroyTree(treePtr->right);
+        destroyTree(treePtr->getLeft());
+        destroyTree(treePtr->getRight());
         delete treePtr;
         treePtr = NULL;
     }
@@ -73,7 +73,7 @@ int BinarySearchTree::getHeight() {
 int BinarySearchTree::findHeight (BinaryNode *node) {
     if (node == NULL)
         return 0;
-    return 1 + max(findHeight(node->left), findHeight(node->right));
+    return 1 + max(findHeight(node->getLeft()), findHeight(node->getRight()));
 }
 
 // end finding height
@@ -87,7 +87,7 @@ int BinarySearchTree::getNumberOfNodes() {
 int BinarySearchTree::countNodes(BinaryNode *node, int &num) {
     if (node == NULL)
         return 0;
-    numNodes = 1 + countNodes(node->left, numNodes) + countNodes(node->right, numNodes);
+    numNodes = 1 + countNodes(node->getLeft(), numNodes) + countNodes(node->getRight(), numNodes);
     return numNodes;
 }
 
@@ -97,10 +97,10 @@ BinaryNode* BinarySearchTree::insert(BinaryNode *&node, const int &newEntry) {
     if (node == NULL)
         node = new BinaryNode(newEntry);
 
-    else if(node->data > newEntry)
-        node->left = insert(node->left, newEntry);
-    else if(node->data < newEntry)
-        node->right = insert(node->right, newEntry);
+    else if(node->getData() > newEntry)
+        node->setLeft(insert(node->getLeft(), newEntry));
+    else if(node->getData() < newEntry)
+        node->setRight(insert(node->getRight(), newEntry));
 
     return node;
 }
@@ -109,13 +109,6 @@ bool BinarySearchTree::add(const int &newEntry) {
 
     BinaryNode *flag = insert(root, newEntry);
     return (bool) flag;
-    /*
-    if (isEmpty()) {
-        root = new BinaryNode(newEntry);
-        return true;
-    }
-    else
-        return root->add(newEntry);*/
 }
 
 // removing
@@ -127,12 +120,12 @@ bool BinarySearchTree::remove(const int &entry) {
 bool BinarySearchTree::deleteNode(BinaryNode *node, const int &entry) {
     if (node == NULL)
         return false;
-    else if (entry == node->data)
+    else if (entry == node->getData())
         return deleteNodeItem(node);
-    else if (entry > node->data)
-        return deleteNode(node->right, entry);
-    else if (entry < node->data)
-        return deleteNode(node->left, entry);
+    else if (entry > node->getData())
+        return deleteNode(node->getRight(), entry);
+    else if (entry < node->getData())
+        return deleteNode(node->getLeft(), entry);
     return false;
 }
 
@@ -141,32 +134,32 @@ bool BinarySearchTree::deleteNodeItem(BinaryNode * &nodePtr) {
     int replacementItem;
 
     // (1)  Test for a leaf
-    if ((nodePtr->left == NULL) && (nodePtr->right == NULL)) {
+    if ((nodePtr->getLeft() == NULL) && (nodePtr->getRight() == NULL)) {
         delete nodePtr;
         nodePtr = NULL;
     }
 
     //(2)  Test for no left child
-    else if (nodePtr->left == NULL) {
+    else if (nodePtr->getLeft() == NULL) {
         delPtr = nodePtr;
-        nodePtr = nodePtr->right;
-        delPtr->right = NULL;
+        nodePtr = nodePtr->getRight();
+        delPtr->setRight(NULL);
         delete delPtr;
     }
 
     // (3)  Test for no right child
-    else if (nodePtr->right == NULL) {
+    else if (nodePtr->getRight() == NULL) {
         delPtr = nodePtr;
-        nodePtr = nodePtr->left;
-        delPtr->left = NULL;
+        nodePtr = nodePtr->getLeft();
+        delPtr->setLeft(NULL);
         delete delPtr;
     }
 
     // (4)  There are two children:
     //      Retrieve and delete the inorder successor
     else {
-        processLeftmost(nodePtr->right, replacementItem);
-        nodePtr->data = replacementItem;
+        processLeftmost(nodePtr->getRight(), replacementItem);
+        nodePtr->setData(replacementItem);
     }
 
     return true;
@@ -174,15 +167,15 @@ bool BinarySearchTree::deleteNodeItem(BinaryNode * &nodePtr) {
 
 
 void BinarySearchTree::processLeftmost(BinaryNode *&nodePtr, int &treeItem){
-    if (nodePtr->left == NULL) {
-        treeItem = nodePtr->data;
+    if (nodePtr->getLeft() == NULL) {
+        treeItem = nodePtr->getData();
         BinaryNode *delPtr = nodePtr;
-        nodePtr = nodePtr->right;
-        delPtr->right = NULL; // defense
+        nodePtr = nodePtr->getRight();
+        delPtr->setRight(NULL); // defense
         delete delPtr;
     }
     else
-        processLeftmost(nodePtr->left, treeItem);
+        processLeftmost(nodePtr->getLeft(), treeItem);
 }
 
 // end removing
@@ -197,9 +190,9 @@ void BinarySearchTree::preorderTraverse() {
 
 void BinarySearchTree::preorder(BinaryNode *node) {
     if (node != NULL) {
-        cout << node->data << endl;
-        preorder(node->left);
-        preorder(node->right);
+        cout << node->getData() << endl;
+        preorder(node->getLeft());
+        preorder(node->getRight());
     }
 }
 
@@ -209,9 +202,9 @@ void BinarySearchTree::inorderTraverse() {
 
 void BinarySearchTree::inorder(BinaryNode *node) {
     if (node != NULL) {
-        inorder(node->left);
-        cout << node->data << endl;
-        inorder(node->right);
+        inorder(node->getLeft());
+        cout << node->getData() << endl;
+        inorder(node->getRight());
     }
 }
 
@@ -221,23 +214,55 @@ void BinarySearchTree::postorderTraverse() {
 
 void BinarySearchTree::postorder(BinaryNode *node) {
     if (node != NULL) {
-        postorder(node->left);
-        postorder(node->right);
-        cout << node->data << endl;
+        postorder(node->getLeft());
+        postorder(node->getRight());
+        cout << node->getData() << endl;
     }
 }
 
 
 void BinarySearchTree::levelorderTraverse() {
+    int height = findHeight(root);
+    for (int i = 0; i < height; ++i) {
+        levelorder(root, i);
+    }
+}
 
+void BinarySearchTree::levelorder(BinaryNode *node, const int &level) {
+    if (node != NULL) {
+        if (level == 1)
+            cout << node->getData() << endl;
+        else {
+            levelorder(node->getLeft(), level - 1);
+            levelorder(node->getRight(), level - 1);
+        }
+    }
 }
 
 int BinarySearchTree::span(const int &a, const int &b) {
-    return 0;
+    int result = 0;
+    span(root, a, b, result);
+    return result;
+}
+
+void BinarySearchTree::span(BinaryNode *node, const int &a, const int &b, int &result) {
+    if (node == NULL)
+        return;
+    if (node->getData() > a)
+        span(node->getLeft(), a, b, result);
+    if (node->getData() >= a && node->getData() <= b)
+        result++;
+    if (node->getData() < b)
+        span(node->getRight(), a, b, result);
+
 }
 
 void BinarySearchTree::mirror() {
+    mirror(root);
+}
 
+void BinarySearchTree::mirror(BinaryNode *node) {
+    
 }
 
 void BinarySearchTree::trim(const int &min, const int &max) {
@@ -247,39 +272,21 @@ void BinarySearchTree::trim(const int &min, const int &max) {
 void BinarySearchTree::trim(BinaryNode *node, const int &min, const int &max) {
     if (node != NULL) {
         //cout << node->data << "debug data" << endl;
-        if (node->data < min) {
+        if (node->getData() < min) {
             BinaryNode *tmp = node;
-            node = node->right;
+            node = node->getRight();
             destroyTree(tmp);
         }
-        else if (node->data > max) {
+        else if (node->getData() > max) {
             BinaryNode *tmp = node;
-            node = node->left;
+            node = node->getLeft();
             destroyTree(tmp);
         }
         else {
-            trim(node->left, min, max);
-            trim(node->right, min, max);
+            trim(node->getLeft(), min, max);
+            trim(node->getLeft(), min, max);
         }
     }
-}
-
-
-bool BinarySearchTree::checkBST(BinaryNode* node) {
-    if(node->left == NULL || node->right == NULL) {
-        return true;
-    }
-    else if(node->left != NULL && node->left->data < node->data) {
-        return checkBST(node->left);
-    }
-    else if(node->right != NULL && node->right->data > node->data) {
-        return checkBST(node->right);
-    }
-    return false;
-}
-
-bool BinarySearchTree::checkBST() {
-    return checkBST(root);
 }
 
 bool BinarySearchTree::isbalancedTree() {
@@ -292,9 +299,9 @@ bool BinarySearchTree::isbalancedTree(BinaryNode *node) {
     // absolute value of left height - right height <= 1
     // return true)}
     return (node == NULL) ||
-    (isbalancedTree(node->left) &&
-     isbalancedTree(node->right) &&
-     abs(findHeight(node->left) - findHeight(node->right)) <= 1);
+    (isbalancedTree(node->getLeft()) &&
+     isbalancedTree(node->getRight()) &&
+     abs(findHeight(node->getLeft()) - findHeight(node->getRight())) <= 1);
 }
 
 bool BinarySearchTree::isfullTree() {
@@ -304,11 +311,11 @@ bool BinarySearchTree::isfullTree() {
 bool BinarySearchTree::isfullTree(BinaryNode *node) {
     if (node == NULL)
         return true;
-    if((node->left != NULL && node->right == NULL) ||
-            (node->left == NULL && node->right != NULL))
+    if((node->getLeft() != NULL && node->getRight() == NULL) ||
+            (node->getLeft() == NULL && node->getRight() != NULL))
         return false;
     else
-        return isfullTree(node->left) && isfullTree(node->right);
+        return isfullTree(node->getLeft()) && isfullTree(node->getRight());
 }
 
 
@@ -325,22 +332,22 @@ int BinarySearchTree::inorderSuccessor(const int &value) {
 }
 
 int BinarySearchTree::inorderSuccessor(BinaryNode *node, const int &value) {
-    if (value < node->data)
-        return inorderSuccessor(node->left, value);
-    else if (value > node->data)
-        return inorderSuccessor(node->right, value);
-    else if (value == node->data) {
-        if (node->right->left == NULL)
-            return node->right->data;
+    if (value < node->getData())
+        return inorderSuccessor(node->getLeft(), value);
+    else if (value > node->getData())
+        return inorderSuccessor(node->getRight(), value);
+    else if (value == node->getData()) {
+        if (node->getRight()->getLeft() == NULL)
+            return node->getRight()->getData();
         else
-            return goLeft(node->right->left);
+            return goLeft(node->getRight()->getLeft());
     }
     return -1;
 }
 
 int BinarySearchTree::goLeft(BinaryNode *node) {
-    if(node->left == NULL)
-        return node->data;
+    if(node->getLeft() == NULL)
+        return node->getData();
     else
-        return goLeft(node->left);
+        return goLeft(node->getLeft());
 }

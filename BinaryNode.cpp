@@ -7,41 +7,43 @@
 #define NULL 0
 
 BinaryNode::BinaryNode() {
-    data = NULL;
-    left = NULL;
-    right = NULL;
+    setData(0);
+    setLeft(NULL);
+    setRight(NULL);
 }
 
 BinaryNode::BinaryNode(const int &entry) {
-    data = entry;
-    left = NULL;
-    right = NULL;
+    setData(entry);
+    setLeft(NULL);
+    setRight(NULL);
 }
 
 BinaryNode::BinaryNode(const int &entry, BinaryNode *bnleft, BinaryNode *bnright) {
-    data = entry;
-    left = bnleft;
-    right = bnright;
+    setData(entry);
+    setLeft(bnleft);
+    setRight(bnright);
 }
 
-bool BinaryNode::add(const int &entry) {
-    if (data == entry)
-        return false;
-    else if (data > entry) {
-        if (left == NULL) {
-            left = new BinaryNode(entry);
-            return true;
-        }
-        else
-            return left->add(entry);
-    }
-    else if (data < entry) {
-        if (right == NULL) {
-            right = new BinaryNode(entry);
-            return true;
-        }
-        else
-            return right->add(entry);
-    }
-    return false;
+int BinaryNode::getData() {
+    return data;
+}
+
+void BinaryNode::setData(const int &newData) {
+    data = newData;
+}
+
+BinaryNode *& BinaryNode::getLeft() {
+    return left;
+}
+
+void BinaryNode::setLeft(BinaryNode *node) {
+    left = node;
+}
+
+BinaryNode *& BinaryNode::getRight() {
+    return right;
+}
+
+void BinaryNode::setRight(BinaryNode *node) {
+    right = node;
 }
