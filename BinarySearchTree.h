@@ -117,6 +117,7 @@ private:
     void span (BinaryNode *node, const int &a, const int &b, int &result);
 
     void mirror(BinaryNode *node);
+    void swapSubtrees(BinaryNode *node);
 
     //properties
     BinaryNode *root;

@@ -246,14 +246,14 @@ int BinarySearchTree::span(const int &a, const int &b) {
 }
 
 void BinarySearchTree::span(BinaryNode *node, const int &a, const int &b, int &result) {
-    if (node == NULL)
-        return;
-    if (node->getData() > a)
-        span(node->getLeft(), a, b, result);
-    if (node->getData() >= a && node->getData() <= b)
-        result++;
-    if (node->getData() < b)
-        span(node->getRight(), a, b, result);
+    if (node != NULL) {
+        if (node->getData() > a)
+            span(node->getLeft(), a, b, result);
+        if (node->getData() >= a && node->getData() <= b)
+            result++;
+        if (node->getData() < b)
+            span(node->getRight(), a, b, result);
+    }
 
 }
 
@@ -262,7 +262,19 @@ void BinarySearchTree::mirror() {
 }
 
 void BinarySearchTree::mirror(BinaryNode *node) {
+    if (node != NULL) {
+        mirror(node->getLeft());
+        mirror(node->getRight());
+        swapSubtrees(node);
+    }
+}
 
+void BinarySearchTree::swapSubtrees(BinaryNode *node) {
+    if (node != NULL) {
+        BinaryNode *tmp = node->getRight();
+        node->setRight(node->getLeft());
+        node->setLeft(tmp);
+    }
 }
 
 void BinarySearchTree::trim(const int &min, const int &max) {

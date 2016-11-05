@@ -5,7 +5,14 @@
 using namespace std;
 
 int main() {
-    BinarySearchTree tree(41);
+    BinarySearchTree tree(5);
+    tree.add(3);
+    tree.add(8);
+    tree.add(2);
+    tree.add(4);
+    tree.add(6);
+    tree.add(10);
+    /*
     tree.add(13);
     tree.add(45);
     tree.add(10);
@@ -21,9 +28,19 @@ int main() {
     tree.add(77);
     tree.add(39);
     tree.add(28);
-    tree.add(50);
+    tree.add(50);*/
 
+    cout << "***** Inorder *****" << endl;
+    tree.inorderTraverse();
 
+    cout << endl << endl;
+    tree.mirror();
+    tree.inorderTraverse();
+
+    cout << endl << endl;
+    tree.mirror();
+    tree.inorderTraverse();
+/*
     cout << "***** Preorder *****" << endl;
     tree.preorderTraverse();
 
@@ -35,6 +52,6 @@ int main() {
 
     cout << "***** Levelorder" << endl;
     tree.levelorderTraverse();
-
+*/
     return 0;
 }
