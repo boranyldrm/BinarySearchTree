@@ -8,6 +8,10 @@
 
 #include "BinaryNode.h"
 
+#include <iostream>
+
+using namespace std;
+
 class BinarySearchTree {
 
 public:
@@ -99,14 +103,17 @@ private:
     int findHeight (BinaryNode *node);
 
     // find number of nodes
-    int countNodes (BinaryNode *node, int &num);
+    int countNodes (BinaryNode *node);
 
     BinaryNode* insert (BinaryNode *&node, const int &newEntry);
 
     // deleteNode, deleteNodeItem, processLeftmost used for remove
-    bool deleteNode (BinaryNode *node, const int &entry);
+    bool deleteNode (BinaryNode *&node, const int &entry);
     bool deleteNodeItem (BinaryNode * &nodePtr);
     void processLeftmost (BinaryNode *&nodePtr, int &treeItem);
+
+    // contains
+    bool isContain(BinaryNode *node, const int &entry);
 
     // traversing
     void preorder (BinaryNode *node);

@@ -3,9 +3,7 @@
 //
 
 #include "BinarySearchTree.h"
-#include <iostream>
 
-using namespace std;
 
 // constructors
 
@@ -17,15 +15,15 @@ BinarySearchTree::BinarySearchTree() {
 
 BinarySearchTree::BinarySearchTree(const int &entry) {
     root = new BinaryNode(entry);
-    height = 1;
-    numNodes = 1;
+    height++;
+    numNodes++;
 }
 
 
 BinarySearchTree::BinarySearchTree(BinarySearchTree &tree) {
     copyTree(tree.root, root);
-    height = tree.height;
-    numNodes = tree.numNodes;
+    height = tree.getHeight();
+    numNodes = tree.getNumberOfNodes();
 }
 
 void BinarySearchTree::copyTree(BinaryNode *treePtr, BinaryNode *&newTreePtr) const {
@@ -80,14 +78,14 @@ int BinarySearchTree::findHeight (BinaryNode *node) {
 
 // finding number of nodes
 int BinarySearchTree::getNumberOfNodes() {
-    countNodes(root, numNodes);
+    countNodes(root);
     return numNodes;
 }
 
-int BinarySearchTree::countNodes(BinaryNode *node, int &num) {
+int BinarySearchTree::countNodes(BinaryNode *node) {
     if (node == NULL)
         return 0;
-    numNodes = 1 + countNodes(node->getLeft(), numNodes) + countNodes(node->getRight(), numNodes);
+    numNodes = 1 + countNodes(node->getLeft()) + countNodes(node->getRight());
     return numNodes;
 }
 
@@ -106,7 +104,6 @@ BinaryNode* BinarySearchTree::insert(BinaryNode *&node, const int &newEntry) {
 }
 
 bool BinarySearchTree::add(const int &newEntry) {
-
     BinaryNode *flag = insert(root, newEntry);
     return (bool) flag;
 }
@@ -117,26 +114,25 @@ bool BinarySearchTree::remove(const int &entry) {
     return deleteNode(root, entry);
 }
 
-bool BinarySearchTree::deleteNode(BinaryNode *node, const int &entry) {
-    if (node == NULL)
-        return false;
-    else if (entry == node->getData())
-        return deleteNodeItem(node);
-    else if (entry > node->getData())
-        return deleteNode(node->getRight(), entry);
-    else if (entry < node->getData())
-        return deleteNode(node->getLeft(), entry);
+bool BinarySearchTree::deleteNode(BinaryNode *&node, const int &entry) {
+    if (node != NULL) {
+        if (entry == node->getData())
+            return deleteNodeItem(node);
+        else if (entry < node->getData())
+            return deleteNode(node->getLeft(), entry);
+        else if (entry > node->getData())
+            return deleteNode(node->getRight(), entry);
+    }
     return false;
 }
 
-bool BinarySearchTree::deleteNodeItem(BinaryNode * &nodePtr) {
+bool BinarySearchTree::deleteNodeItem(BinaryNode *&nodePtr) {
     BinaryNode *delPtr;
-    int replacementItem;
 
     // (1)  Test for a leaf
     if ((nodePtr->getLeft() == NULL) && (nodePtr->getRight() == NULL)) {
-        delete nodePtr;
         nodePtr = NULL;
+        delete nodePtr;
     }
 
     //(2)  Test for no left child
@@ -158,6 +154,7 @@ bool BinarySearchTree::deleteNodeItem(BinaryNode * &nodePtr) {
     // (4)  There are two children:
     //      Retrieve and delete the inorder successor
     else {
+        int replacementItem;
         processLeftmost(nodePtr->getRight(), replacementItem);
         nodePtr->setData(replacementItem);
     }
@@ -181,6 +178,22 @@ void BinarySearchTree::processLeftmost(BinaryNode *&nodePtr, int &treeItem){
 // end removing
 
 bool BinarySearchTree::contains(const int &entry) {
+    if (root == NULL)
+        return false;
+    else
+        return isContain(root, entry);
+}
+
+
+bool BinarySearchTree::isContain(BinaryNode *node, const int &entry) {
+    if (node != NULL) {
+        if (node->getData() == entry)
+            return true;
+        else if (entry < node->getData())
+            return isContain(node->getLeft(), entry);
+        else if (entry > node->getData())
+            return isContain(node->getRight(), entry);
+    }
     return false;
 }
 
@@ -223,7 +236,7 @@ void BinarySearchTree::postorder(BinaryNode *node) {
 
 void BinarySearchTree::levelorderTraverse() {
     int height = findHeight(root);
-    for (int i = 0; i < height; ++i) {
+    for (int i = 0; i <= height; ++i) {
         levelorder(root, i);
     }
 }
@@ -363,3 +376,4 @@ int BinarySearchTree::goLeft(BinaryNode *node) {
     else
         return goLeft(node->getLeft());
 }
+
